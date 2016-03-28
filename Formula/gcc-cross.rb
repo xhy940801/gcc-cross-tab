@@ -6,25 +6,25 @@ class GccCross < Formula
   depends_on "mpfr"
   depends_on "gmp"
   depends_on "libmpc"
-  depends_on "gcc"
+  depends_on "binutils-cross"
 
   def install
-    system "./configure", "--prefix=#{prefix}",
-                          "CC=gcc-5",
-                          "CXX=g++-5",
-                          "CPP=cpp-5",
-                          "LD=gcc-5",
-                          "--program-suffix=-i686-elf-cross",
-                          "--target=i686-elf",
-                          "--disable-nls",
-                          "--enable-languages=c,c++",
-                          "--without-headers",
-                          "--with-gmp=#{Formula["gmp"].opt_prefix}",
-                          "--with-mpfr=#{Formula["mpfr"].opt_prefix}",
-                          "--with-mpc=#{Formula["libmpc"].opt_prefix}"
-    system "make", "all-gcc"
-    system "make", "all-target-libgcc"
-    system "make", "install-gcc"
-    system "make", "install-target-libgcc"
+    mkdir "build" do
+      ENV["PATH"] = "#{Formula["binutils-cross"].bin}:#{HOMEBREW_PREFIX}:" + ENV["PATH"]
+      system "../configure", "--prefix=#{prefix}",
+                             "--target=i686-elf",
+                             "--disable-nls",
+                             "--enable-languages=c,c++",
+                             "--enable-multilib",
+                             "--enable-interwork",
+                             "--without-headers",
+                             "--with-gmp=#{Formula["gmp"].opt_prefix}",
+                             "--with-mpfr=#{Formula["mpfr"].opt_prefix}",
+                             "--with-mpc=#{Formula["libmpc"].opt_prefix}"
+      system "make", "all-gcc"
+      system "make", "all-target-libgcc"
+      system "make", "install-gcc"
+      system "make", "install-target-libgcc"
+    end
   end
 end

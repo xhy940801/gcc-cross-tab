@@ -10,12 +10,8 @@ class BinutilsCross < Formula
 
   def install
     system "./configure", "--prefix=#{prefix}",
-                          "CC=gcc-5",
-                          "CXX=g++-5",
-                          "CPP=cpp-5",
-                          "LD=gcc-5",
-                          "--program-suffix=-i686-elf-cross",
                           "--target=i686-elf",
+                          "--with-sysroot",
                           "--disable-nls",
                           "--disable-werror"
     system "make"
