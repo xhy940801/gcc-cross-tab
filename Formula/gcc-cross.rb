@@ -18,7 +18,10 @@ class GccCross < Formula
                           "--target=i686-elf",
                           "--disable-nls",
                           "--enable-languages=c,c++",
-                          "--without-headers"
+                          "--without-headers",
+                          "--with-gmp=#{Formula["gmp"].opt_prefix}",
+                          "--with-mpfr=#{Formula["mpfr"].opt_prefix}",
+                          "--with-mpc=#{Formula["libmpc"].opt_prefix}"
     system "make", "all-gcc"
     system "make", "all-target-libgcc"
     system "make", "install-gcc"
